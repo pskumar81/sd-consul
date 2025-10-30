@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  consul:
+    image: consul:1.15.3
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: >
+      consul agent -server -ui -node=server-1 -bootstrap-expect=1
+      -client=0.0.0.0 -bind=0.0.0.0 -data-dir=/consul/data
+    volumes:
+      - consul_data:/consul/data
+    networks:
+      - electronic-shop
+
+networks:
+  electronic-shop:
+    driver: bridge
+
+volumes:
+  consul_data:
